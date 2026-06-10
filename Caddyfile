@@ -1,3 +1,5 @@
 :{$PORT} {
-    reverse_proxy http://agentmemory:3113
+    reverse_proxy http://agentmemory:3113 {
+        header_up X-Real-IP {remote}
+    }
 }

@@ -1,6 +1,9 @@
 :{$PORT} {
-    # 将所有的根路径流量，加上 /agentmemory 前缀后转发到后端的 8080 端口
-    rewrite * /agentmemory{uri}
-    reverse_proxy http://agentmemory:8080 
+    # 核心：強迫 Caddy 將外網流量精準轉發給同一個項目內部的 agentmemory 容器的 3113 端口
+    reverse_proxy http://agentmemory:3113 {
+        header_up Host {upstream_hostport}
+        header_up X-Real-IP {remote}
+    }
 }
+
 

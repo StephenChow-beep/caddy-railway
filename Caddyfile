@@ -1,15 +1,13 @@
-:{$PORT} {
+:80 {
     # 针对 Railway 默认发送的 / 路径检查，Caddy 直接秒回 200 状态码
     handle / {
         respond "OK" 200
     }
 
-    # 将除此之外的所有真正请求，强行反向代理到 Viewer 的 3113 端口
-    handle {
-        reverse_proxy http://agentmemory:3113 {
-            header_up Host {upstream_hostport}
-            header_up X-Real-IP {remote}
-        }
+    # 丢弃所有复杂的判断，将所有进入 80 端口的流量无条件转发到内网的 agentmemory 服务
+    reverse_proxy http://agentmemory:3113 {
+        header_up Host {upstream_hostport}
+        header_up X-Real-IP {remote}
     }
 }
 

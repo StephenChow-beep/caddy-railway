@@ -1,6 +1,3 @@
-# This is your Caddy configuration. This default config
 :{$PORT} {
-    reverse_proxy http://agentmemory.railway.internal:3113 {
-        header_up X-Real-IP {remote}
-    }
+    reverse_proxy http://agentmemory:3113
 }

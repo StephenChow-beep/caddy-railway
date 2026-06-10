@@ -1,8 +1,15 @@
 :{$PORT} {
-    # 核心：強迫 Caddy 將外網流量精準轉發給同一個項目內部的 agentmemory 容器的 3113 端口
-    reverse_proxy http://agentmemory:3113 {
-        header_up Host {upstream_hostport}
-        header_up X-Real-IP {remote}
+    # 针对 Railway 默认发送的 / 路径检查，Caddy 直接秒回 200 状态码
+    handle / {
+        respond "OK" 200
+    }
+
+    # 将除此之外的所有真正请求，强行反向代理到 Viewer 的 3113 端口
+    handle {
+        reverse_proxy http://agentmemory:3113 {
+            header_up Host {upstream_hostport}
+            header_up X-Real-IP {remote}
+        }
     }
 }
 
